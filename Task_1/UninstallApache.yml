@@ -1,0 +1,42 @@
+---
+- name: Uninstall Apache httpd
+  any_errors_fatal: true
+  hosts: epam1-centos
+  become: yes
+  become_method: sudo
+  become_user: root
+
+  tasks:
+
+  - name: "Gather facts for packages"
+    package_facts:
+      manager: "auto"
+
+  - name: Uninstall package httpd
+    yum:
+      name: httpd
+      state: absent
+
+  - name: "NGINX test result"
+    fail:
+      msg: "NGINX found"
+    when: "'httpd' in ansible_facts.packages"
+
+  - name: Create index.html
+    file:
+      dest: /var/www/html/index.html
+      state: absent
+
+  - name: Open port 443
+    firewalld:
+      service: https
+      permanent: yes
+      state: disabled
+      immediate: yes
+
+  - name: Open port 80
+    firewalld:
+      service: http
+      permanent: yes
+      state: disabled
+      immediate: yes

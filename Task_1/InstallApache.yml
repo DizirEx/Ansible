@@ -1,0 +1,47 @@
+---
+- name: Install Apache httpd
+  any_errors_fatal: true
+  hosts: epam1-centos
+  become: yes
+  become_method: sudo
+  become_user: root
+
+  tasks:
+  - name: Install package httpd
+    yum:
+      name: httpd
+      state: latest
+
+  - name: Enable service httpd
+    systemd:
+      name: httpd.service
+      state: started
+    register: result
+
+#  - debug:
+#      msg: "{{ result }}"
+
+  - name: Check on working service
+    fail:
+      msg: "Service httpd don't working"
+    when: result.state!="started"
+
+  - name: Create index.html
+    copy:
+      content: "Welcome to my web server"
+      dest: /var/www/html/index.html
+      force: yes
+
+  - name: Open port 443
+    firewalld:
+      service: https
+      permanent: yes
+      state: enabled
+      immediate: yes
+
+  - name: Open port 80
+    firewalld:
+      service: http
+      permanent: yes
+      state: enabled
+      immediate: yes
