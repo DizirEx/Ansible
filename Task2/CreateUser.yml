@@ -1,0 +1,21 @@
+---
+- name: Create users
+  any_errors_fatal: true
+  hosts: epam1-centos
+  become: yes
+  become_method: sudo
+  become_user: root
+  vars_files:
+    - vars.yml
+
+
+  tasks:
+    - name: Create user {{ item.key }}
+      user:
+        name: "{{ item.value.username }}"
+        home: "{{ item.value.home_dir }}"
+        comment: "{{ item.value.email }}"
+        password: "{{ item.value.password }}"
+        state: present
+        update_password: on_create
+      with_items: "{{ users | dict2items }}"
