@@ -1,0 +1,21 @@
+---
+- name: Install and start Apache
+  include_tasks: "centos-install-httpd.yml"
+  when: ansible_os_family == "RedHat"
+
+- name: Create file /var/www/html/index.html with hostname
+  template:
+    dest: "/var/www/html/index.html"
+    src: "index.html"
+    mode: "0644"
+    owner: root
+    group: root
+
+- name: Allow HTTP
+  firewalld:
+    service: http
+    permanent: yes
+    state: enabled
+  notify:
+    - Restart_firewalld
+    - Enable_firewalld

@@ -1,0 +1,2 @@
+[epam-centos]
+epam1-centos ansible_host=172.16.65.15

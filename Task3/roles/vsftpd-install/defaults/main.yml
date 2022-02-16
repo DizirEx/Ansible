@@ -1,0 +1,4 @@
+---
+vsftpd_allow_anon: "YES"
+vsftpd_anon_home_dir: "/var/ftp/pub"
+vsftpd_anon_upload_dir: "/var/ftp/pub/upload"

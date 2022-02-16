@@ -1,0 +1,11 @@
+- name: Upgrade all packages
+  yum:
+    name: '*'
+    state: latest
+
+- name: Install httpd
+  yum:
+    name: httpd
+    state: present
+  notify:
+    - Enable_service_httpd

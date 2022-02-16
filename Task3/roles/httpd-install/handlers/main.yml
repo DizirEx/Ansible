@@ -1,0 +1,17 @@
+---
+- name: Restart_firewalld
+  systemd:
+    name: firewalld
+    state: restarted
+    enabled: yes
+
+- name: Enable_firewalld
+  systemd:
+    name: firewalld
+    enabled: yes
+
+- name: Enable_service_httpd
+  systemd:
+    name: httpd.service
+    state: started
+  register: result

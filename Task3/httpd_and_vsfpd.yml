@@ -1,0 +1,10 @@
+- name: Install httpd and vsftpd
+  any_errors_fatal: true
+  hosts: epam1-centos
+  become: yes
+  become_method: sudo
+  become_user: root
+
+  roles:
+    - httpd-install
+    - vsftpd-install
